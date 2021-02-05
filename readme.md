@@ -43,7 +43,7 @@ vernemq_1    | 07:50:17.208 [info] [brod] Produced <<48,7,83,231,125,209,194,88,
 vernemq_1    | 07:50:18.446 [info] client kafka_client: payload connection down 8747bf86694a:9092
 vernemq_1    | reason:{shutdown,tcp_closed}
 
-!!! mosquitto_pub -h 127.0.0.1 -p 1883 -t fd/1 -m '{"schema":"telemetry","data":{"packetID":55308}}'
+>>> mosquitto_pub -h 127.0.0.1 -p 1883 -t fd/1 -m '{"schema":"telemetry","data":{"packetID":55308}}'
 
 vernemq_1    | 07:50:19.765 [info] auth_on_publish: undefined {[],<<"mosq-3XYRJOuOLGHmEwU28D">>} 0 [<<"fd">>,<<"1">>] <<"{\"schema\":\"telemetry\",\"data\":{\"packetID\":55308}}">> false
 vernemq_1    | 07:50:19.770 [error] kafka_client (re)connect to 8747bf86694a:9092 aborted.
