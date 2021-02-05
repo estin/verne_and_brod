@@ -1,8 +1,8 @@
 # VerneMQ + brod Demo Plugin
 
+> :warning: **brod works fine**. this repo useful as simple demo about using brod with vernemq for persons with lack of knowledge with this fields like me
 
-Case for https://github.com/klarna/brod/issues/431
-
+Case for https://github.com/klarna/brod/issues/431 **CLOSED - misconfigured**
 
 Run
 
