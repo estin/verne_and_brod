@@ -1,0 +1,51 @@
+version: '3.4'
+services:
+  zookeeper:
+    image: confluent/zookeeper
+    ports:
+      - "2181:2181"
+  kafka:
+    image: confluent/kafka
+    ports:
+      - "9092:9092"
+    links:
+      - zookeeper
+    depends_on:
+      - zookeeper
+    environment:
+      KAFKA_ADVERTISED_HOST_NAME: kafka
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka:9092
+      KAFKA_LOG_MESSAGE_TIMESTAMP_TYPE: LogAppendTime
+      KAFKA_LISTENERS: PLAINTEXT://kafka:9092
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+      KAFKA_AUTO_CREATE_TOPICS_ENABLE: 'true'
+      KAFKA_DELETE_TOPIC_ENABLE: 'true'
+      KAFKA_BROKER_ID: 0
+      KAFKA_CREATE_TOPICS: "fd:1:1"
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - ./kafka.properties:/etc/kafka/server.properties
+  rebar3:
+    build: ./rebar3-docker
+    command: rebar3 compile
+    container_name: rebar3
+    volumes:
+      - .:/build
+  vernemq:
+    image: vernemq/vernemq
+    environment:
+      - DOCKER_VERNEMQ_ACCEPT_EULA=yes
+      - DOCKER_VERNEMQ_LOG__CONSOLE=both
+      - DOCKER_VERNEMQ_ALLOW_ANONYMOUS=on
+      - DOCKER_VERNEMQ_PLUGINS__VERNEMQ_DEMO_PLUGIN=on
+      - DOCKER_VERNEMQ_PLUGINS__VERNEMQ_DEMO_PLUGIN__PATH=/opt/default
+      - DOCKER_VERNEMQ_PLUGINS__VMQ_DIVERSITY=on
+    volumes:
+      - ./_build:/opt
+    ports:
+      - "1883:1883"
+      - "8883:8883"
+      - "8888:8888"
+    depends_on:
+      - rebar3
+      - kafka
